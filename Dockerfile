@@ -10,13 +10,11 @@ WORKDIR /app
 # Copy package files and binding configuration
 COPY package*.json ./
 COPY binding.gyp ./
+COPY src/ ./src/
 
 # Install dependencies and globally install node-gyp
 RUN npm install -g node-gyp
 RUN npm install
-
-# Build native N-API module
-RUN npx node-gyp rebuild
 
 # Copy remaining source code
 COPY . .
