@@ -1,0 +1,195 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{--mono:'JetBrains Mono',monospace;--sans:'DM Sans',sans-serif}
+  .wrap{font-family:var(--sans);padding:2rem 1.5rem;max-width:860px;margin:0 auto}
+  .header{display:flex;align-items:baseline;gap:10px;margin-bottom:2rem}
+  .logo{font-family:var(--mono);font-size:15px;font-weight:500;color:var(--color-text-primary);letter-spacing:-0.5px}
+  .logo span{color:var(--color-text-tertiary)}
+  .badge{font-size:11px;font-weight:500;padding:2px 8px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-tertiary)}
+  .editor-wrap{position:relative;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary)}
+  .editor-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+  .editor-bar-left{display:flex;align-items:center;gap:8px}
+  .dot{width:10px;height:10px;border-radius:50%;background:var(--color-border-secondary)}
+  .lang-label{font-family:var(--mono);font-size:12px;color:var(--color-text-tertiary);margin-left:4px}
+  textarea{width:100%;min-height:280px;padding:1.25rem;font-family:var(--mono);font-size:13px;line-height:1.7;color:var(--color-text-primary);background:transparent;border:none;outline:none;resize:vertical;tab-size:4}
+  .controls{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;margin-top:12px;align-items:end}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field label{font-size:12px;color:var(--color-text-secondary);font-weight:500;letter-spacing:0.02em}
+  .field-input-wrap{display:flex;align-items:center;gap:0;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);overflow:hidden;background:var(--color-background-primary)}
+  .field-input-wrap input{flex:1;border:none;outline:none;padding:8px 10px;font-size:14px;font-family:var(--mono);color:var(--color-text-primary);background:transparent;width:100%}
+  .field-unit{font-size:12px;color:var(--color-text-tertiary);padding:0 10px;font-family:var(--mono);white-space:nowrap;border-left:0.5px solid var(--color-border-tertiary)}
+  .input-wrap{margin-top:16px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary)}
+  .input-bar{display:flex;align-items:center;padding:9px 14px;background:var(--color-background-secondary);border-bottom:0.5px solid var(--color-border-tertiary)}
+  .input-label{font-size:12px;color:var(--color-text-secondary);font-weight:500;letter-spacing:0.02em}
+  .input-area{width:100%;min-height:100px;padding:1rem 1.25rem;font-family:var(--mono);font-size:13px;line-height:1.7;color:var(--color-text-primary);background:transparent;border:none;outline:none;resize:none;}
+  .run-btn{height:38px;padding:0 20px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-text-primary);color:var(--color-background-primary);font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;transition:opacity 0.15s}
+  .run-btn:hover{opacity:0.82}
+  .run-btn:active{opacity:0.65}
+  .output-wrap{margin-top:12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+  .output-bar{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;background:var(--color-background-secondary);border-bottom:0.5px solid var(--color-border-tertiary)}
+  .output-label{font-size:12px;color:var(--color-text-secondary);font-weight:500;letter-spacing:0.02em}
+  .verdict{font-size:11px;font-weight:500;padding:2px 9px;border-radius:4px}
+  .verdict.ok{background:#EAF3DE;color:#3B6D11}
+  .verdict.tle{background:#FAEEDA;color:#854F0B}
+  .verdict.mle{background:#FAECE7;color:#993C1D}
+  .verdict.hidden{display:none}
+  .output-body{padding:1rem 1.25rem;font-family:var(--mono);font-size:13px;line-height:1.7;color:var(--color-text-primary);min-height:80px;white-space:pre-wrap}
+  .output-body.muted{color:var(--color-text-tertiary)}
+  .divider{height:0.5px;background:var(--color-border-tertiary);margin:1.5rem 0}
+  .meta-row{display:flex;gap:1.5rem}
+  .meta-item{display:flex;flex-direction:column;gap:2px}
+  .meta-key{font-size:11px;color:var(--color-text-tertiary);letter-spacing:0.04em}
+  .meta-val{font-family:var(--mono);font-size:13px;color:var(--color-text-secondary)}
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Online C++ IDE with configurable runtime and memory limits</h2>
+
+  <div class="header">
+    <div class="logo">exec<span>/</span>cpp</div>
+    <div class="badge">C++17</div>
+  </div>
+
+  <div class="editor-wrap">
+    <div class="editor-bar">
+      <div class="editor-bar-left">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <span class="lang-label">main.cpp</span>
+      </div>
+    </div>
+    <textarea id="code" spellcheck="false">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    cout &lt;&lt; "Hello, world!" &lt;&lt; endl;
+    return 0;
+}</textarea>
+  </div>
+
+  <div class="controls">
+    <div class="field">
+      <label>Time limit</label>
+      <div class="field-input-wrap">
+        <input type="number" id="tl" value="1000" min="100" max="10000" />
+        <span class="field-unit">ms</span>
+      </div>
+    </div>
+    <div class="field">
+      <label>Memory limit</label>
+      <div class="field-input-wrap">
+        <input type="number" id="ml" value="256" min="16" max="1024" />
+        <span class="field-unit">MB</span>
+      </div>
+    </div>
+    <button class="run-btn" onclick="runCode()">Run</button>
+  </div>
+
+  <div class="input-wrap">
+    <div class="input-bar">
+      <span class="input-label">Custom Input</span>
+    </div>
+    <textarea id="custom-input" class="input-area" placeholder="Enter custom input here..." spellcheck="false"></textarea>
+  </div>
+
+  <div class="output-wrap" style="margin-top:16px">
+    <div class="output-bar">
+      <span class="output-label">Output</span>
+      <span class="verdict hidden" id="verdict"></span>
+    </div>
+    <div class="output-body muted" id="output">Your output will appear here.</div>
+    <div class="divider" id="meta-divider" style="display:none;margin:0"></div>
+    <div class="meta-row" id="meta" style="display:none;padding:10px 14px;background:var(--color-background-secondary)">
+      <div class="meta-item"><span class="meta-key">TIME</span><span class="meta-val" id="meta-time">—</span></div>
+      <div class="meta-item"><span class="meta-key">MEMORY</span><span class="meta-val" id="meta-mem">—</span></div>
+      <div class="meta-item"><span class="meta-key">EXIT</span><span class="meta-val" id="meta-exit">—</span></div>
+    </div>
+  </div>
+
+  <div class="editor-wrap" id="submitted-wrap" style="margin-top:16px; display:none;">
+    <div class="editor-bar">
+      <span class="output-label">Submitted Code</span>
+    </div>
+    <div class="output-body" id="submitted-code" style="min-height: auto;"></div>
+  </div>
+</div>
+
+<script>
+function runCode() {
+  const code = document.getElementById('code').value;
+  const input = document.getElementById('custom-input').value;
+  const tl = document.getElementById('tl').value;
+  const ml = document.getElementById('ml').value;
+  const out = document.getElementById('output');
+  const verdict = document.getElementById('verdict');
+  const meta = document.getElementById('meta');
+  const metaDivider = document.getElementById('meta-divider');
+  const submittedWrap = document.getElementById('submitted-wrap');
+  const submittedCode = document.getElementById('submitted-code');
+
+  verdict.className = 'verdict hidden';
+  meta.style.display = 'none';
+  metaDivider.style.display = 'none';
+  submittedWrap.style.display = 'none';
+  out.className = 'output-body muted';
+  out.textContent = 'Compiling…';
+
+  fetch('/execute', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ code, input, timeLimit: Number(tl), memoryLimit: Number(ml) })
+  })
+  .then(r => r.json())
+  .then(data => {
+    out.className = 'output-body';
+    if (data.verdict === 'TLE') {
+      verdict.textContent = 'TLE';
+      verdict.className = 'verdict tle';
+      out.textContent = 'Time limit exceeded.';
+    } else if (data.verdict === 'MLE') {
+      verdict.textContent = 'MLE';
+      verdict.className = 'verdict mle';
+      out.textContent = 'Memory limit exceeded.';
+    } else if (data.verdict === 'CE') {
+      verdict.textContent = 'CE';
+      verdict.className = 'verdict mle';
+      out.textContent = data.output || 'Compilation Error';
+    } else if (data.verdict === 'RE') {
+      verdict.textContent = 'RE';
+      verdict.className = 'verdict mle';
+      out.textContent = data.output || 'Runtime Error';
+    } else {
+      verdict.textContent = 'OK';
+      verdict.className = 'verdict ok';
+      out.textContent = data.output || '(no output)';
+    }
+    if (data.time !== undefined) {
+      document.getElementById('meta-time').textContent = data.time + ' ms';
+      document.getElementById('meta-mem').textContent = data.memory + ' MB';
+      document.getElementById('meta-exit').textContent = data.exitCode;
+      meta.style.display = 'flex';
+      metaDivider.style.display = 'block';
+    }
+    
+    if (data.submittedCode) {
+      submittedCode.textContent = data.submittedCode;
+      submittedWrap.style.display = 'block';
+    }
+  })
+  .catch(() => {
+    out.className = 'output-body muted';
+    out.textContent = 'Could not reach the server.';
+  });
+}
+
+document.getElementById('code').addEventListener('keydown', e => {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    const s = e.target.selectionStart;
+    e.target.value = e.target.value.substring(0, s) + '    ' + e.target.value.substring(e.target.selectionEnd);
+    e.target.selectionStart = e.target.selectionEnd = s + 4;
+  }
+});
+</script>

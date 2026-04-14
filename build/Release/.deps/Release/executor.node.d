@@ -1,0 +1,1 @@
+cmd_Release/executor.node := c++ -bundle -undefined dynamic_lookup -Wl,-search_paths_first -mmacosx-version-min=10.15 -arch arm64 -L./Release -stdlib=libc++  -o Release/executor.node Release/obj.target/executor/src/executor.o Release/nothing.a 
